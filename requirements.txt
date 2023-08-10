@@ -1,0 +1,10 @@
+fastapi 
+uvicorn[standard] 
+passlib 
+pyjwt 
+python-multipart
+bcrypt
+sqlalchemy
+pydantic-extra-types
+phonenumbers
+pydantic[email]
