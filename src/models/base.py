@@ -7,7 +7,7 @@ Base = declarative_base()
 DATABASE_URL = "sqlite:///./test.db"  # Use the appropriate URL for your SQLite database file
 
 engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=True, autoflush=True, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def create_tables():
     print("creating database")
