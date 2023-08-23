@@ -11,12 +11,10 @@ from src.models.base import get_db
 from src.models.customer import Customer, LoginCredential
 from sqlalchemy.orm import Session
 import os
-from cryptography.fernet import Fernet
+from src.utils import generate_id
 
-# get db session
-db = get_db()
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY", "default")
 if not SECRET_KEY:
     raise ValueError("SECRET_KEY environment variable not set")
 
@@ -85,7 +83,7 @@ def verify_password(plain_password, hashed_password):
 
 # Create a new JWT token
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    private_key = os.environ.get("JWT_PRIVATE_KEY")
+    private_key = os.environ.get("JWT_PRIVATE_KEY", "default")
     if not private_key:
         raise ValueError("JWT_PRIVATE_KEY environment variable not set")
 
@@ -126,7 +124,7 @@ def signup(customer: User, password: str, db: Session = Depends(get_db)):
 
     hashed_password = get_password_hash(password)
 
-    new_customer = Customer(**customer.model_dump())
+    new_customer = Customer(**customer.model_dump(), customer_id=generate_id())
     db.add(new_customer)
     db.commit()
     db.refresh(new_customer)
@@ -135,7 +133,8 @@ def signup(customer: User, password: str, db: Session = Depends(get_db)):
         username=customer.email,
         password=hashed_password,
         customer_id=new_customer.customer_id,
-        registration_date=datetime.now()
+        registration_date=datetime.now(),
+        credential_id=generate_id()
     )
 
     db.add(new_login_credential)

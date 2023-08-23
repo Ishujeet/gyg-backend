@@ -4,7 +4,7 @@ from .base import Base
 
 class Customer(Base):
     __tablename__ = 'customer'
-    customer_id = Column(Integer, primary_key=True)
+    customer_id = Column(String(50), primary_key=True)
     first_name = Column(String(50))
     last_name = Column(String(50))
     email = Column(String(100))
@@ -14,7 +14,7 @@ class Customer(Base):
 
 class LoginCredential(Base):
     __tablename__ = 'login_credential'
-    credential_id = Column(Integer, primary_key=True)
+    credential_id = Column(String(50), primary_key=True)
     customer_id = Column(Integer, unique=True)
     username = Column(String(50), unique=True)
     password = Column(String(100))
